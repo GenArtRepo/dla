@@ -1,18 +1,21 @@
 /*
 ** Diffusion-Limited Aggregation 
 * Cristian Rojas Cardenas, April 2022
-* Algorithm based on the thecodingtrain implementation.
+* Algorithm based on the implementation by Daniel Shifman.
 * See the example here: 
 * https://thecodingtrain.com/CodingChallenges/034-dla.html
 * 
-* The algorithm generates a bunch of point (walkers) over the canvas. 
-* The walkers change the direction of their velocity randomly in each operation, 
-* as well as they stop moving given the next scenarios:
+* In this implementation, a set number of particles (walkers) are randomly placed 
+* on a 2D canvas. At every time step, each walker changes it position by adding a 
+* randomly generated velocity vector to its position.
+* A walker will stop moving if:
 * 
-* 1.	Stuck against a wall.
-* 2.	Stuck against another walker stuck.
+* 1.	It collides with an edge of the canvas, or
+* 2.	It collides with another static walker.
+*
+* Additionally, the colour of a walker is changed when it changes state (from moving
+* to static). The darkness of the shade of static walkers illustrates the distance travelled.
 * 
-* The algorithm generates “n” walkers and evaluates their changes every “steps” frames. 
 * For more information about the theory behind the algorithm please visit: 
 * http://paulbourke.net/fractals/dla/
 * 
@@ -23,11 +26,13 @@ let settings = {
     Play: function(){ play=true; },
     Pause: function(){ play=false; },
     Reset: function(){ init()},
-    Radius: 4,
-    n: 1000,
-    Steps: 200,
+    Radius: 3,
+    n: 2000,
+    Steps: 1,
   }
   
+
+
   function gui(){
       // Adding the GUI menu
       var gui = new dat.GUI();
@@ -61,7 +66,7 @@ let settings = {
   
   function setup(){
       gui();
-      createCanvas(720, 400); 
+      createCanvas(400, 400); 
       maxDistance = width/2*width/2 + height/2*height/2;
       init();
   }
@@ -82,9 +87,8 @@ let settings = {
                   walkers[i].move();
                   
                   // In case of coaltion relocate the walker into the tree
-                  if(walkers[i].detectCoalition(tree)){
-  
-                      // Color processing
+                  if(walkers[i].detectCollision(tree)){
+                      // C #1olor processing
                       factor = walkers[i].distance(
                           walkers[i].position, 
                           createVector(width/2, height/2)

@@ -41,15 +41,14 @@ let settings = {
       gui.add(settings,'Pause');
       gui.add(settings,'Reset');
       gui.add(settings,'Radius', 1, 10).step(1);
-      gui.add(settings,'n', 100, 2000).step(100);
+      gui.add(settings,'n', 100, 5000).step(100)
       gui.add(settings,'Steps', 10, 500).step(10);
   }
   
-  let play = true;
+  let play = false;
   let tree = [];
   let walkers = [];
   let walker;
-  
 
   
   function init(){
@@ -88,7 +87,7 @@ let settings = {
                   
                   // In case of coaltion relocate the walker into the tree
                   if(walkers[i].detectCollision(tree)){
-                      // C #1olor processing
+                      // Color processing
                       factor = walkers[i].distance(
                           walkers[i].position, 
                           createVector(width/2, height/2)

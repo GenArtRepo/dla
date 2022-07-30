@@ -49,10 +49,15 @@ let settings = {
   let tree = [];
   let walkers = [];
   let walker;
-
+  let c1;
+  let c2;
   
   function init(){
       background(255);
+
+      c1 = color(37,124,163);
+      c2 = color(220,243,255);
+
       tree = [];
       walkers = [];
       for (let i = 0; i < settings.n; i++) {
@@ -87,16 +92,8 @@ let settings = {
                   
                   // In case of coaltion relocate the walker into the tree
                   if(walkers[i].detectCollision(tree)){
-                      // Color processing
-                      factor = walkers[i].distance(
-                          walkers[i].position, 
-                          createVector(width/2, height/2)
-                      )/maxDistance * 255;
-                      walkers[i].color = color(
-                          1 - factor, 
-                          1 - factor, 
-                          factor);
-  
+                      // Colour the walker
+                      walkers[i].setColor()
                       // Relocate
                       tree.push(walkers[i]);
                       walkers.splice(i, 1);

@@ -46,6 +46,13 @@ class Walker {
         constrain(this.position.y, 0, height);
     }
 
+    setColor(){
+        // Color processing
+        let factor = this.distance(
+            this.position, createVector(width/2, height/2))/maxDistance;;
+        this.color = lerpColor(c2, c1, factor);
+    }
+
     render(){
         fill(this.color);
         strokeWeight(0.2);

@@ -47,20 +47,24 @@ let settings = {
       gui.add(settings,'Pause');
       gui.add(settings,'Reset');
       gui.add(settings,'Radius', 1, 10).step(1);
-      gui.add(settings,'n', 100, 2000).step(100);
+      gui.add(settings,'n', 100, 5000).step(100)
       gui.add(settings,'Steps', 10, 500).step(10);
       gui.add(settings,'Edges', [true, false]);
   }
   
-  let play = true;
+  let play = false;
   let tree = [];
   let walkers = [];
   let walker;
-  
-
+  let c1;
+  let c2;
   
   function init(){
       background(255);
+
+      c1 = color(37,124,163);
+      c2 = color(220,243,255);
+
       tree = [];
       walkers = [];
       for (let i = 0; i < settings.n; i++) {
@@ -111,7 +115,7 @@ let settings = {
           for (let i = 0; i < settings.Steps; i++) {
                   for (let i = 0; i < walkers.length; i++) {
                   walkers[i].move();
-                  
+
                   
                   // In case of collision relocate the walker into the tree
                   if(walkers[i].detectCollision(tree, detect_edges=settings.Edges)){

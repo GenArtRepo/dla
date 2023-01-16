@@ -15,20 +15,23 @@ class Walker {
     }
 
     // Check with all neighbors and walls a collision
-    detectCollision(tree){
+    detectCollision(tree, detect_edges=false){
 
         // collision with edges
-        if (this.position.x + settings.Radius >= width  || 
-            this.position.y + settings.Radius >= height || 
-            this.position.x - settings.Radius <= 0      || 
-            this.position.y - settings.Radius <= 0){
-                return true;
-            } 
+        if(detect_edges){
+            if (this.position.x + settings.Radius >= width  || 
+                this.position.y + settings.Radius >= height || 
+                this.position.x - settings.Radius <= 0      || 
+                this.position.y - settings.Radius <= 0){
+                    return true;
+                }
+        }
         
         // collision with other walkers
         for (let i = 0; i < tree.length; i++) {
             var distance = this.distance(this.position, tree[i].position);
             if(distance <= 2*settings.Radius*settings.Radius){
+            // if(distance <= 2*settings.Radius){
                 return true;
             }
         }
@@ -42,8 +45,15 @@ class Walker {
         var turn = random(-.2,.2);
         this.vel.rotate(turn);
         this.position.add(this.vel);     
-        constrain(this.position.x, 0, width);
-        constrain(this.position.y, 0, height);
+        if(this.position.x < settings.Radius || this.position.x > width - settings.Radius){
+            this.vel.x*=-1;
+        }
+        if(this.position.y < settings.Radius || this.position.y > height - settings.Radius){
+            this.vel.y*=-1;
+        }
+
+        // this.position.x = constrain(this.position.x, 0, width);
+        // this.position.y = constrain(this.position.y, 0, height);
     }
 
     setColor(){
